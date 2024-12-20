@@ -1,0 +1,258 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Search and Sort Page";
+}
+
+<!-- Include Bootstrap CSS -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTK6xHjE+8qN/79z9YPH7ORz6CgFA6+9Y0G5pMDC/U/"
+      crossorigin="anonymous">
+
+<div class="container mt-5">
+    <!-- Card with Search Form -->
+    <div class="card shadow-sm">
+        <div class="card-header text-white" style="background-color: #16253f">
+            <h3 class="mb-0">Search Company Details</h3>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row gx-3 gy-2 align-items-center">
+                <div class="col-sm-10">
+                    <label for="SearchTerm" class="visually-hidden">Search</label>
+                    <input type="text" id="SearchTerm" name="SearchTerm" class="form-control"
+                           placeholder="Enter search term..." value="@Model.SearchTerm">
+                </div>
+                <div class="col-sm-2 d-grid">
+                    <button type="submit" class="btn" style="background-color: #16253f; color: white">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.Results != null && Model.Results.Any())
+    {
+        <div class="mt-4">
+            <h4>Search Results</h4>
+            <table class="table table-striped table-bordered table-hover mt-3" id="resultsTable">
+                <thead style="background-color: #16253f; color: white">
+                    <tr>
+                        <th scope="col" onclick="sortTable(0)" style="cursor: pointer">ID</th>
+                        <th scope="col" onclick="sortTable(1)" style="cursor: pointer">Company Name</th>
+                        <th scope="col">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Results)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.CompanyName</td>
+                            <td>
+                                <!-- View Details Button -->
+                                <button class="btn btn-info btn-sm" onclick="viewDetails('@Html.Raw(item.CompanyName.Replace("'", "\\'"))')">
+                                    View Details
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(Model.SearchTerm))
+    {
+        <div class="alert alert-warning mt-4" role="alert">
+            No results found for "<strong>@Model.SearchTerm</strong>".
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header" style="background-color: #16253f; color: white;">
+                <h5 class="modal-title" id="detailsModalLabel">Company Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <div id="modalContent">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap and JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Function to sort table columns
+    function sortTable(columnIndex) {
+        const table = document.getElementById("resultsTable");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.rows);
+
+        const currentOrder = table.dataset.sortOrder || "asc";
+        const newOrder = currentOrder === "asc" ? "desc" : "asc";
+        table.dataset.sortOrder = newOrder;
+
+        const sortedRows = rows.sort((rowA, rowB) => {
+            const cellA = rowA.cells[columnIndex].innerText.trim();
+            const cellB = rowB.cells[columnIndex].innerText.trim();
+
+            const isNumeric = !isNaN(cellA) && !isNaN(cellB);
+            if (isNumeric) {
+                return newOrder === "asc" ? cellA - cellB : cellB - cellA;
+            } else {
+                return newOrder === "asc"
+                    ? cellA.localeCompare(cellB)
+                    : cellB.localeCompare(cellA);
+            }
+        });
+
+        tbody.append(...sortedRows);
+    }
+
+    // Function to fetch and display details in modal
+        function viewDetails(companyName) {
+            try {
+            // Properly encode the company name for safe usage in a URL
+            const encodedCompanyName = encodeURIComponent(companyName);
+
+            // Use proper template literal for the fetch URL
+            fetch(`/api/GetCompanyDetails?companyName=${encodedCompanyName}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert(JSON.stringify(data));
+                    populateModal(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching details:', error);
+                    alert('No Details Found.');
+                });
+        } catch (error) {
+            console.error('Error in viewDetails function:', error);
+            alert('An unexpected error occurred. Please try again.');
+        }
+    }
+
+    function populateModal(data) {
+        const modalContent = document.getElementById("modalContent");
+        modalContent.innerHTML = ""; // Clear existing content
+
+        const professionalData = [];
+        const professionalTitles = [];
+
+        data.forEach((item) => {
+            const header = item.header[0];
+            const values = item.value.map((v) => v.row.filter((val) => val.trim() !== ""));
+
+            if (header === "IQ_PROFESSIONAL") {
+                professionalData.push(...values);
+            } else if (header === "IQ_PROFESSIONAL_TITLE") {
+                professionalTitles.push(...values);
+            } else if (values.length > 0) {
+                const label = toReadableHeader(header);
+                const value = values.flat().join("<br>"); // Flatten and join multiple rows
+                const content = `
+                    <div class="mb-3">
+                        <strong style="color: #16253f;">${label}:</strong>
+                        <p style="margin: 0; color: #555;">${value}</p>
+                    </div>
+                `;
+                modalContent.innerHTML += content;
+            }
+        });
+
+        // If professionals and titles exist, render them in a table
+        if (professionalData.length > 0 && professionalTitles.length > 0) {
+            const tableContent = `
+                <h5 style="color: #16253f;">Professionals</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Title</th>
+                                <th>Person</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${professionalData
+                                .map((person, index) => {
+                                    const title = professionalTitles[index]?.[0] || "Unknown Title";
+                                    return `
+                                        <tr>
+                                            <td>${title}</td>
+                                            <td>${person[0]}</td>
+                                        </tr>
+                                    `;
+                                })
+                                .join("")}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            modalContent.innerHTML += tableContent;
+        }
+
+        // Show the modal
+        const detailsModal = new bootstrap.Modal(document.getElementById("detailsModal"));
+        detailsModal.show();
+    }
+
+    // Utility function to format headers into readable text
+    function toReadableHeader(header) {
+        return header
+            .replace(/_/g, " ") // Replace underscores with spaces
+            .replace("IQ ", "")
+            .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
+    }
+</script>
+
+<style>
+    /* Custom table-striped row background color */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #E0E0E0 !important;
+    }
+
+    .table-striped tbody tr:hover {
+        background-color: #d6d6d6 !important;
+    }
+
+    .modal-header {
+        background-color: #16253f;
+        color: white;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    strong {
+        font-size: 1rem;
+    }
+
+    p {
+        font-size: 0.95rem;
+        color: #555;
+    }
+
+    .table th {
+        background-color: #16253f !important;
+        color: white;
+    }
+</style>
