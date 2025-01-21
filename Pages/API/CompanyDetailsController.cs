@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using DemoMVC.Data;
 using Microsoft.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using static DemoWebApp.Pages.IndexModel;
 
 namespace DemoWebApp.API
 {
@@ -66,166 +67,168 @@ namespace DemoWebApp.API
 
             try
             {
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    await connection.OpenAsync();
+                //using (var connection = new SqlConnection(connectionString))
+                //{
+                //    await connection.OpenAsync();
 
-                    // Step 1: Insert into Request table
-                    var requestId = 0;
-                    var insertRequestQuery = @"
-                INSERT INTO [dbo].[Request] (RequestName, RequestType, CreateUserIdentity, CreateDate)
-                OUTPUT INSERTED.RequestId
-                VALUES (@RequestName, @RequestType, @CreateUserIdentity, GETDATE())";
+                //    // Step 1: Insert into Request table
+                //    var requestId = 0;
+                //    var insertRequestQuery = @"
+                //INSERT INTO [dbo].[Request] (RequestName, RequestType, CreateUserIdentity, CreateDate)
+                //OUTPUT INSERTED.RequestId
+                //VALUES (@RequestName, @RequestType, @CreateUserIdentity, GETDATE())";
 
-                    using (var command = new SqlCommand(insertRequestQuery, connection))
-                    {
-                        command.Parameters.AddWithValue("@RequestName", request.Title);
-                        command.Parameters.AddWithValue("@RequestType", request.CompanyName);
-                        command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser"); // Replace with actual user identity
+                //    using (var command = new SqlCommand(insertRequestQuery, connection))
+                //    {
+                //        command.Parameters.AddWithValue("@RequestName", request.Title);
+                //        command.Parameters.AddWithValue("@RequestType", request.CompanyName);
+                //        command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser"); // Replace with actual user identity
 
-                        requestId = (int)await command.ExecuteScalarAsync();
-                    }
+                //        requestId = (int)await command.ExecuteScalarAsync();
+                //    }
 
 
-                    // Initialize consolidated data for CoreData
-                    string entityName = null;
-                    string entityAddress = null;
-                    string entityPhone = null;
-                    string entityRevenue = null;
-                    string entityEmployees = null;
-                    string entityYearFounded = null;
-                    string entityWebUrl = null;
-                    string entityDescription = null;
+                //    // Initialize consolidated data for CoreData
+                //    string entityName = null;
+                //    string entityAddress = null;
+                //    string entityPhone = null;
+                //    string entityRevenue = null;
+                //    string entityEmployees = null;
+                //    string entityYearFounded = null;
+                //    string entityWebUrl = null;
+                //    string entityDescription = null;
 
-                    // Consolidate Detail1Data into a single row
-                    foreach (var item in detail1Data)
-                    {
-                        var headers = item.Headers as List<string>;
-                        var values = item.Values as List<List<string>>;
+                //    // Consolidate Detail1Data into a single row
+                //    foreach (var item in detail1Data)
+                //    {
+                //        var headers = item.Headers as List<string>;
+                //        var values = item.Values as List<List<string>>;
 
-                        if (headers != null && values != null)
-                        {
-                            for (int i = 0; i < headers.Count; i++)
-                            {
-                                var header = headers[i];
-                                var value = values.FirstOrDefault()?.ElementAtOrDefault(0); // Get the first value
+                //        if (headers != null && values != null)
+                //        {
+                //            for (int i = 0; i < headers.Count; i++)
+                //            {
+                //                var header = headers[i];
+                //                var value = values.FirstOrDefault()?.ElementAtOrDefault(0); // Get the first value
 
-                                switch (header)
-                                {
-                                    case "IQ_COMPANY_NAME":
-                                        entityName = value;
-                                        break;
-                                    case "IQ_COMPANY_ADDRESS":
-                                        entityAddress = value;
-                                        break;
-                                    case "IQ_COMPANY_PHONE":
-                                        entityPhone = value;
-                                        break;
-                                    case "IQ_TOTAL_REV":
-                                        entityRevenue = value;
-                                        break;
-                                    case "IQ_EMPLOYEES":
-                                        entityEmployees = value;
-                                        break;
-                                    case "IQ_YEAR_FOUNDED":
-                                        entityYearFounded = value;
-                                        break;
-                                    case "IQ_COMPANY_WEBSITE":
-                                        entityWebUrl = value;
-                                        break;
-                                    case "IQ_BUSINESS_DESCRIPTION":
-                                        entityDescription = value;
-                                        break;
-                                }
-                            }
-                        }
-                    }
+                //                switch (header)
+                //                {
+                //                    case "IQ_COMPANY_NAME":
+                //                        entityName = value;
+                //                        break;
+                //                    case "IQ_COMPANY_ADDRESS":
+                //                        entityAddress = value;
+                //                        break;
+                //                    case "IQ_COMPANY_PHONE":
+                //                        entityPhone = value;
+                //                        break;
+                //                    case "IQ_TOTAL_REV":
+                //                        entityRevenue = value;
+                //                        break;
+                //                    case "IQ_EMPLOYEES":
+                //                        entityEmployees = value;
+                //                        break;
+                //                    case "IQ_YEAR_FOUNDED":
+                //                        entityYearFounded = value;
+                //                        break;
+                //                    case "IQ_COMPANY_WEBSITE":
+                //                        entityWebUrl = value;
+                //                        break;
+                //                    case "IQ_BUSINESS_DESCRIPTION":
+                //                        entityDescription = value;
+                //                        break;
+                //                }
+                //            }
+                //        }
+                //    }
 
-                    using (var command = new SqlCommand("INSERT INTO CoreData (fkRequestID, EntityName, EntityAddress, EntityPhone, EntityRevenue, EntityEmployeeCount, EntityYearFounded, EntityWebUrl, EntityOverviewer, CreateDate, CreateUserIdentity) VALUES (@fkRequestID, @EntityName, @EntityAddress, @EntityPhone, @EntityRevenue, @EntityEmployeeCount, @EntityYearFounded, @EntityWebUrl, @EntityOverviewer, @CreateDate, @CreateUserIdentity)", connection))
-                    {
-                        command.Parameters.AddWithValue("@fkRequestID", requestId);
-                        command.Parameters.AddWithValue("@EntityName", entityName ?? (object)DBNull.Value);
-                        command.Parameters.AddWithValue("@EntityAddress", entityAddress ?? (object)DBNull.Value);
-                        command.Parameters.AddWithValue("@EntityPhone", entityPhone ?? (object)DBNull.Value);
-                        command.Parameters.AddWithValue("@EntityRevenue", entityRevenue ?? (object)DBNull.Value);
-                        command.Parameters.AddWithValue("@EntityEmployeeCount", entityEmployees ?? (object)DBNull.Value);
-                        command.Parameters.AddWithValue("@EntityYearFounded", entityYearFounded ?? (object)DBNull.Value);
-                        command.Parameters.AddWithValue("@EntityWebUrl", entityWebUrl ?? (object)DBNull.Value);
-                        command.Parameters.AddWithValue("@EntityOverviewer", entityDescription ?? (object)DBNull.Value);
-                        command.Parameters.AddWithValue("@CreateDate", DateTime.Now);
-                        command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
+                //    using (var command = new SqlCommand("INSERT INTO CoreData (fkRequestID, EntityName, EntityAddress, EntityPhone, EntityRevenue, EntityEmployeeCount, EntityYearFounded, EntityWebUrl, EntityOverviewer, CreateDate, CreateUserIdentity) VALUES (@fkRequestID, @EntityName, @EntityAddress, @EntityPhone, @EntityRevenue, @EntityEmployeeCount, @EntityYearFounded, @EntityWebUrl, @EntityOverviewer, @CreateDate, @CreateUserIdentity)", connection))
+                //    {
+                //        command.Parameters.AddWithValue("@fkRequestID", requestId);
+                //        command.Parameters.AddWithValue("@EntityName", entityName ?? (object)DBNull.Value);
+                //        command.Parameters.AddWithValue("@EntityAddress", entityAddress ?? (object)DBNull.Value);
+                //        command.Parameters.AddWithValue("@EntityPhone", entityPhone ?? (object)DBNull.Value);
+                //        command.Parameters.AddWithValue("@EntityRevenue", entityRevenue ?? (object)DBNull.Value);
+                //        command.Parameters.AddWithValue("@EntityEmployeeCount", entityEmployees ?? (object)DBNull.Value);
+                //        command.Parameters.AddWithValue("@EntityYearFounded", entityYearFounded ?? (object)DBNull.Value);
+                //        command.Parameters.AddWithValue("@EntityWebUrl", entityWebUrl ?? (object)DBNull.Value);
+                //        command.Parameters.AddWithValue("@EntityOverviewer", entityDescription ?? (object)DBNull.Value);
+                //        command.Parameters.AddWithValue("@CreateDate", DateTime.Now);
+                //        command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
 
-                        command.ExecuteNonQuery();
-                    }
+                //        command.ExecuteNonQuery();
+                //    }
 
-                    // Insert into KeyExecutives
-                    var professionalData = detail1Data
-                        .Where(item => item.Headers.Contains("IQ_PROFESSIONAL"))
-                        .SelectMany(item => item.Values)
-                        .ToList();
+                //    // Insert into KeyExecutives
+                //    var professionalData = detail1Data
+                //        .Where(item => item.Headers.Contains("IQ_PROFESSIONAL"))
+                //        .SelectMany(item => item.Values)
+                //        .ToList();
 
-                    var professionalTitles = detail1Data
-                        .Where(item => item.Headers.Contains("IQ_PROFESSIONAL_TITLE"))
-                        .SelectMany(item => item.Values)
-                        .ToList();
+                //    var professionalTitles = detail1Data
+                //        .Where(item => item.Headers.Contains("IQ_PROFESSIONAL_TITLE"))
+                //        .SelectMany(item => item.Values)
+                //        .ToList();
 
-                    for (int i = 0; i < professionalData.Count; i++)
-                    {
-                        var title = professionalTitles.ElementAtOrDefault(i)?.FirstOrDefault() ?? "Unknown Title";
-                        var name = professionalData.ElementAtOrDefault(i)?.FirstOrDefault() ?? "Unknown Name";
+                //    for (int i = 0; i < professionalData.Count; i++)
+                //    {
+                //        var title = professionalTitles.ElementAtOrDefault(i)?.FirstOrDefault() ?? "Unknown Title";
+                //        var name = professionalData.ElementAtOrDefault(i)?.FirstOrDefault() ?? "Unknown Name";
 
-                        var insertKeyExecutivesQuery = @"
-                    INSERT INTO [dbo].[KeyExecutives] 
-                    (fkRequestID, Title, Name, CreateDate, CreateUserIdentity)
-                    VALUES 
-                    (@RequestId, @Title, @Name, GETDATE(), @CreateUserIdentity)";
+                //        var insertKeyExecutivesQuery = @"
+                //    INSERT INTO [dbo].[KeyExecutives] 
+                //    (fkRequestID, Title, Name, CreateDate, CreateUserIdentity)
+                //    VALUES 
+                //    (@RequestId, @Title, @Name, GETDATE(), @CreateUserIdentity)";
 
-                        using (var command = new SqlCommand(insertKeyExecutivesQuery, connection))
-                        {
-                            command.Parameters.AddWithValue("@RequestId", requestId);
-                            command.Parameters.AddWithValue("@Title", title);
-                            command.Parameters.AddWithValue("@Name", name);
-                            command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
+                //        using (var command = new SqlCommand(insertKeyExecutivesQuery, connection))
+                //        {
+                //            command.Parameters.AddWithValue("@RequestId", requestId);
+                //            command.Parameters.AddWithValue("@Title", title);
+                //            command.Parameters.AddWithValue("@Name", name);
+                //            command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
 
-                            await command.ExecuteNonQueryAsync();
-                        }
-                    }
+                //            await command.ExecuteNonQueryAsync();
+                //        }
+                //    }
 
-                    // Insert into TransactionSummary
-                    foreach (var transaction in transactionData)
-                    {
-                        var headers = transaction.Headers ?? new List<string>();
-                        var values = transaction.Values ?? new List<List<string>>();
+                //    // Insert into TransactionSummary
+                //    foreach (var transaction in transactionData)
+                //    {
+                //        var headers = transaction.Headers ?? new List<string>();
+                //        var values = transaction.Values ?? new List<List<string>>();
 
-                        for (int i = 0; i < headers.Count; i++)
-                        {
-                            var transactionDescription = headers[i]; // Use header as the description
-                            var transactionValue = values.ElementAtOrDefault(i)?.FirstOrDefault(); // Get the corresponding value
-                            var transactionDate = DateTime.Now; // Current date
-                            var transactionCounsel = DBNull.Value; // Set as NULL
+                //        for (int i = 0; i < headers.Count; i++)
+                //        {
+                //            var transactionDescription = headers[i]; // Use header as the description
+                //            var transactionValue = values.ElementAtOrDefault(i)?.FirstOrDefault(); // Get the corresponding value
+                //            var transactionDate = DateTime.Now; // Current date
+                //            var transactionCounsel = DBNull.Value; // Set as NULL
 
-                            var insertTransactionSummaryQuery = @"
-                            INSERT INTO [dbo].[TransactionSummary] 
-                            (fkRequestID, TransactionDate, TransactionDescription, TransactionValue, TransactionCounsel, CreateDate, CreateUserIdentity)
-                            VALUES 
-                            (@RequestId, @TransactionDate, @TransactionDescription, @TransactionValue, @TransactionCounsel, GETDATE(), @CreateUserIdentity)";
+                //            var insertTransactionSummaryQuery = @"
+                //            INSERT INTO [dbo].[TransactionSummary] 
+                //            (fkRequestID, TransactionDate, TransactionDescription, TransactionValue, TransactionCounsel, CreateDate, CreateUserIdentity)
+                //            VALUES 
+                //            (@RequestId, @TransactionDate, @TransactionDescription, @TransactionValue, @TransactionCounsel, GETDATE(), @CreateUserIdentity)";
 
-                            using (var command = new SqlCommand(insertTransactionSummaryQuery, connection))
-                            {
-                                command.Parameters.AddWithValue("@RequestId", requestId);
-                                command.Parameters.AddWithValue("@TransactionDate", transactionDate);
-                                command.Parameters.AddWithValue("@TransactionDescription", transactionDescription ?? (object)DBNull.Value);
-                                command.Parameters.AddWithValue("@TransactionValue", transactionValue ?? (object)DBNull.Value);
-                                command.Parameters.AddWithValue("@TransactionCounsel", transactionCounsel);
-                                command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
+                //            using (var command = new SqlCommand(insertTransactionSummaryQuery, connection))
+                //            {
+                //                command.Parameters.AddWithValue("@RequestId", requestId);
+                //                command.Parameters.AddWithValue("@TransactionDate", transactionDate);
+                //                command.Parameters.AddWithValue("@TransactionDescription", transactionDescription ?? (object)DBNull.Value);
+                //                command.Parameters.AddWithValue("@TransactionValue", transactionValue ?? (object)DBNull.Value);
+                //                command.Parameters.AddWithValue("@TransactionCounsel", transactionCounsel);
+                //                command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
 
-                                await command.ExecuteNonQueryAsync();
-                            }
-                        }
-                    }
+                //                await command.ExecuteNonQueryAsync();
+                //            }
+                //        }
+                //    }
 
-                    return Ok(new { message = "Data stored successfully!" });
-                }
+                //    return Ok(new { message = "Data stored successfully!" });
+                //}
+
+                return Ok(new { message = "Data stored successfully!" });
             }
             catch (Exception ex)
             {
@@ -234,6 +237,213 @@ namespace DemoWebApp.API
             }
         }
 
+        [HttpGet("GetDataSourceSearch1")]
+        public IActionResult GetDataSourceSearch1(string searchTerm)
+        {
+            // Validate input
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return BadRequest("Search term cannot be empty.");
+            }
+
+            // Load data from JSON file
+            var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Data", "Header1.json");
+            if (!System.IO.File.Exists(jsonFilePath))
+            {
+                return NotFound("Data file not found.");
+            }
+
+            try
+            {
+                var jsonData = System.IO.File.ReadAllText(jsonFilePath);
+                var parsedData = JsonConvert.DeserializeObject<GDSSDKResponseRoot>(jsonData);
+
+                if (parsedData?.GDSSDKResponse == null)
+                {
+                    return NotFound("No data available in the file.");
+                }
+
+                // Find the matching Identifier and process Rows
+                var matchingResponse = parsedData.GDSSDKResponse
+                    .FirstOrDefault(r => string.Equals(r.Identifier, searchTerm, StringComparison.OrdinalIgnoreCase));
+
+                if (matchingResponse != null && matchingResponse.Rows != null)
+                {
+                    var result = matchingResponse.Rows
+                        .Select((row, index) => new ResultItem
+                        {
+                            Id = index + 1,
+                            CompanyName = row.Row.FirstOrDefault() ?? "",  // First element as "CompanyName"
+                            AsOfDate = row.Row.ElementAtOrDefault(1) ?? ""  // Second element as "AsOfDate" if exists
+                        })
+                        .ToList();
+
+                    return Ok(result);
+                }
+
+                return NotFound("No matching data found.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while processing the request: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetDataSourceSearch2")]
+        public IActionResult GetDataSourceSearch2(string searchTerm)
+        {
+            // Validate input
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return BadRequest("Search term cannot be empty.");
+            }
+
+            // Load data from JSON file
+            var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Data", "Header1.json");
+            if (!System.IO.File.Exists(jsonFilePath))
+            {
+                return NotFound("Data file not found.");
+            }
+
+            try
+            {
+                var jsonData = System.IO.File.ReadAllText(jsonFilePath);
+                var parsedData = JsonConvert.DeserializeObject<GDSSDKResponseRoot>(jsonData);
+
+                if (parsedData?.GDSSDKResponse == null)
+                {
+                    return NotFound("No data available in the file.");
+                }
+
+                // Find the matching Identifier and process Rows
+                var matchingResponse = parsedData.GDSSDKResponse
+                    .FirstOrDefault(r => string.Equals(r.Identifier, searchTerm, StringComparison.OrdinalIgnoreCase));
+
+                if (matchingResponse != null && matchingResponse.Rows != null)
+                {
+                    var result = matchingResponse.Rows
+                        .Select((row, index) => new ResultItem
+                        {
+                            Id = index + 1,
+                            CompanyName = row.Row.FirstOrDefault() ?? "",  // First element as "CompanyName"
+                            AsOfDate = row.Row.ElementAtOrDefault(1) ?? ""  // Second element as "AsOfDate" if exists
+                        })
+                        .ToList();
+
+                    return Ok(result);
+                }
+
+                return NotFound("No matching data found.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while processing the request: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetDataSourceSearch3")]
+        public IActionResult GetDataSourceSearch3(string searchTerm)
+        {
+            // Validate input
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return BadRequest("Search term cannot be empty.");
+            }
+
+            // Load data from JSON file
+            var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Data", "Header1.json");
+            if (!System.IO.File.Exists(jsonFilePath))
+            {
+                return NotFound("Data file not found.");
+            }
+
+            try
+            {
+                var jsonData = System.IO.File.ReadAllText(jsonFilePath);
+                var parsedData = JsonConvert.DeserializeObject<GDSSDKResponseRoot>(jsonData);
+
+                if (parsedData?.GDSSDKResponse == null)
+                {
+                    return NotFound("No data available in the file.");
+                }
+
+                // Find the matching Identifier and process Rows
+                var matchingResponse = parsedData.GDSSDKResponse
+                    .FirstOrDefault(r => string.Equals(r.Identifier, searchTerm, StringComparison.OrdinalIgnoreCase));
+
+                if (matchingResponse != null && matchingResponse.Rows != null)
+                {
+                    var result = matchingResponse.Rows
+                        .Select((row, index) => new ResultItem
+                        {
+                            Id = index + 1,
+                            CompanyName = row.Row.FirstOrDefault() ?? "",  // First element as "CompanyName"
+                            AsOfDate = row.Row.ElementAtOrDefault(1) ?? ""  // Second element as "AsOfDate" if exists
+                        })
+                        .ToList();
+
+                    return Ok(result);
+                }
+
+                return NotFound("No matching data found.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while processing the request: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetDataSourceSearch4")]
+        public IActionResult GetDataSourceSearch4(string searchTerm)
+        {
+            // Validate input
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return BadRequest("Search term cannot be empty.");
+            }
+
+            // Load data from JSON file
+            var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Data", "Header1.json");
+            if (!System.IO.File.Exists(jsonFilePath))
+            {
+                return NotFound("Data file not found.");
+            }
+
+            try
+            {
+                var jsonData = System.IO.File.ReadAllText(jsonFilePath);
+                var parsedData = JsonConvert.DeserializeObject<GDSSDKResponseRoot>(jsonData);
+
+                if (parsedData?.GDSSDKResponse == null)
+                {
+                    return NotFound("No data available in the file.");
+                }
+
+                // Find the matching Identifier and process Rows
+                var matchingResponse = parsedData.GDSSDKResponse
+                    .FirstOrDefault(r => string.Equals(r.Identifier, searchTerm, StringComparison.OrdinalIgnoreCase));
+
+                if (matchingResponse != null && matchingResponse.Rows != null)
+                {
+                    var result = matchingResponse.Rows
+                        .Select((row, index) => new ResultItem
+                        {
+                            Id = index + 1,
+                            CompanyName = row.Row.FirstOrDefault() ?? "",  // First element as "CompanyName"
+                            AsOfDate = row.Row.ElementAtOrDefault(1) ?? ""  // Second element as "AsOfDate" if exists
+                        })
+                        .ToList();
+
+                    return Ok(result);
+                }
+
+                return NotFound("No matching data found.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while processing the request: {ex.Message}");
+            }
+        }
 
         private JsonResult GetCompanyData(string companyName)
         {
