@@ -207,17 +207,17 @@
             <div class="modal-footer d-flex justify-content-between">
                 <div class="d-flex align-items-center justify-content-start">
                     <label class="form-check-label me-3">
-                        <input checked type="checkbox" class="form-check-input" id="checkbox1"> Company Details
+                        <input checked type="checkbox" class="form-check-input" id="chkCompanyDetails"> Company Details
                     </label>
                     <label class="form-check-label me-3">
-                        <input checked type="checkbox" class="form-check-input" id="checkbox2"> Professionals
+                        <input checked type="checkbox" class="form-check-input" id="chkProfessionals"> Professionals
                     </label>
                     <label class="form-check-label">
-                        <input checked type="checkbox" class="form-check-input" id="checkbox3"> Transactions
+                        <input checked type="checkbox" class="form-check-input" id="chkTransactions"> Transactions
                     </label>
                 </div>
                 <div class="d-flex align-items-center justify-content-end">
-                    <button type="button" class="btn btn-primary me-2" id="storeButton">Select</button>
+                    <button type="button" class="btn btn-primary me-2" id="selectButton">Select</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -229,6 +229,8 @@
 <input type="hidden" id="selectedCompanies" name="selectedCompanies" value="[]">
 
 <input type="hidden" id="hdnSelectedCompanyName" />
+<input type="hidden" id="hdnSelectedDataSource" />
+
 <!-- Bootstrap and JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -264,12 +266,19 @@
         try {
             // Properly encode the company name for safe usage in a URL
             const encodedCompanyName = encodeURIComponent(companyName);
-
+            
             // Optional: Store the selected company name in a hidden input if needed
             const hiddenCompanyNameField = document.getElementById("hdnSelectedCompanyName");
             if (hiddenCompanyNameField) {
-                hiddenCompanyNameField.value = encodedCompanyName;
+                hiddenCompanyNameField.value = companyName.replace(/'/g, "\\'");
             }
+
+            // Optional: Store the selected company name in a hidden input if needed
+            const hiddenDataSourceField = document.getElementById("hdnSelectedDataSource");
+            if (hiddenDataSourceField) {
+                hiddenDataSourceField.value = datasource;
+            }
+
 
             // Use template literal correctly in the fetch URL
             fetch(`/api/CompanyDetails/GetCompanyDetails?companyName=${encodedCompanyName}`)
@@ -281,7 +290,7 @@
                 })
                 .then(data => {
                     // Call the populateModal function with the fetched data
-                    populateModal(data);
+                    populateModal(data, datasource, false, false, false, false);
                 })
                 .catch(error => {
                     console.error('Error fetching details:', error);
@@ -293,15 +302,50 @@
         }
     }
 
-    function viewSelected()
-    {
+       function viewSelected() {
+        let hiddenField = document.getElementById('selectedCompanies');
+
+        let selectedCompanies;
+        try {
+            selectedCompanies = JSON.parse(hiddenField.value || "[]");
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+            alert("Invalid data in selected companies.");
+            return;
+        }
+
+        const selectedContent = document.getElementById("selectedDetails");
+        selectedContent.innerHTML = "";
+
+        // Loop through each selected company
+        for (const company of selectedCompanies) {
+            const encodedCompanyName = encodeURIComponent(company.CompanyName.replace(/\\'/g, "'"));
+
+            fetch(`/api/CompanyDetails/GetCompanyDetails?companyName=${encodedCompanyName}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Call the populateModal function with the fetched data
+                    populateModal(data, company.DataSource, true, company.CompanyDetails, company.Professionals, company.Transactions);
+                })
+                .catch(error => {
+                    console.error('Error fetching details:', error);
+                    alert(`No details found for: ${company.CompanyName}`);
+                });
+        }
+
         // Show the modal
         const selectedModal = new bootstrap.Modal(document.getElementById("selectedModal"));
         selectedModal.show();
     }
 
 
-     function populateModal(data) {
+
+     function populateModal(data, datasource, review, includeCompanyDetails, includeProfessionals, includeTransactions) {
         const companyDetailsContent = document.getElementById("companyDetailsContent");
         const professionalsContent = document.getElementById("professionalsContent");
         const transactionsContent = document.getElementById("transactionsContent");
@@ -393,14 +437,45 @@
             transactionsContent.innerHTML += content;
         });
 
-        selectedContent.innerHTML += '<div class="mb-3"><strong style="color: #16253f;">DATA SOURCE:</strong><p style="margin: 0; color: #555;">1</p></div>' + companyDetailsContent.innerHTML + "</br>" + professionalsContent.innerHTML + "</br>" + transactionsContent.innerHTML;
-        selectedContent.innerHTML += '<hr style="border: 1px solid black;"><div class="mb-3"><strong style="color: #16253f;">DATA SOURCE:</strong><p style="margin: 0; color: #555;">2</p></div>' + companyDetailsContent.innerHTML + "</br>" + transactionsContent.innerHTML;
-        selectedContent.innerHTML += '<hr style="border: 1px solid black;"><div class="mb-3"><strong style="color: #16253f;">DATA SOURCE:</strong><p style="margin: 0; color: #555;">3</p></div>' + companyDetailsContent.innerHTML + "</br>" + professionalsContent.innerHTML + "</br>" + transactionsContent.innerHTML;
-        selectedContent.innerHTML += '<hr style="border: 1px solid black;"><div class="mb-3"><strong style="color: #16253f;">DATA SOURCE:</strong><p style="margin: 0; color: #555;">4</p></div>' + companyDetailsContent.innerHTML + "</br>" + professionalsContent.innerHTML + "</br>";
+            if (review) {
+        selectedContent.innerHTML += `
+            <hr style="border: 1px solid black;">
+            <div class="mb-3">
+                <strong style="color: #16253f;">DATA SOURCE:</strong>
+                <p style="margin: 0; color: #555;">${datasource}</p>
+            </div>
+        `;
+
+        // Ensure elements exist before appending to avoid errors
+        if (includeCompanyDetails && companyDetailsContent) {
+            selectedContent.innerHTML += companyDetailsContent.innerHTML + "<br>";
+        }
+
+        if (includeProfessionals && professionalsContent) {
+            selectedContent.innerHTML += professionalsContent.innerHTML + "<br>";
+        }
+
+        if (includeTransactions && transactionsContent) {
+            selectedContent.innerHTML += transactionsContent.innerHTML + "<br>";
+        }
+    } else {
+        // Safely check elements before setting values
+        let companyDetailsCheckbox = document.getElementById('chkCompanyDetails');
+        let professionalsCheckbox = document.getElementById('chkProfessionals');
+        let transactionsCheckbox = document.getElementById('chkTransactions');
+
+        if (companyDetailsCheckbox) companyDetailsCheckbox.checked = true;
+        if (professionalsCheckbox) professionalsCheckbox.checked = true;
+        if (transactionsCheckbox) transactionsCheckbox.checked = true;
 
         // Show the modal
-        const detailsModal = new bootstrap.Modal(document.getElementById("detailsModal"));
-        detailsModal.show();
+        const detailsModalElement = document.getElementById("detailsModal");
+        if (detailsModalElement) {
+            const detailsModal = new bootstrap.Modal(detailsModalElement);
+            detailsModal.show();
+        }
+    }
+
     }
 
     // Utility function to format headers into readable labels
@@ -420,16 +495,20 @@
             return;
         }
 
-        // Get the selected company name
-        const companyNameElement = document.getElementById("hdnSelectedCompanyName");
-        if (!companyNameElement || !companyNameElement.value.trim()) {
-            alert("Company name is required.");
-            return;
-        }
+        // // Get the selected company name
+        // const companyNameElement = document.getElementById("hdnSelectedCompanyName");
+        // if (!companyNameElement || !companyNameElement.value.trim()) {
+        //     alert("Company name is required.");
+        //     return;
+        // }
+
+        let hiddenField = document.getElementById('selectedCompanies');
+
+        let selectedCompanies = JSON.parse(hiddenField.value || "[]");
 
         const dataToStore = {
             title: title.trim(),
-            companyname: decodeURIComponent(companyNameElement.value.trim()),
+            details: JSON.stringify(selectedCompanies)
         };
 
         // Debugging: Log data before making the request
@@ -451,12 +530,46 @@
             })
             .then((result) => {
                 alert("Data stored successfully!");
+                $('#selectedModal').modal('hide');
             })
             .catch((error) => {
                 console.error("Error storing data:", error);
                 alert("An error occurred while storing the data. Please try again.");
             });
     });
+
+    document.getElementById("selectButton").addEventListener("click", function () {
+        const companyNameElement = document.getElementById("hdnSelectedCompanyName").value;
+        const dataSourceElement = document.getElementById("hdnSelectedDataSource").value;
+        let hiddenField = document.getElementById('selectedCompanies');
+
+        let selectedCompanies = JSON.parse(hiddenField.value || "[]");
+
+        // Remove existing company entry if it matches the selected company and data source
+        selectedCompanies = selectedCompanies.filter(company =>
+            !(company.CompanyName === companyNameElement && company.DataSource === dataSourceElement)
+        );
+
+        // Add the new company to the list
+        let newCompany = {
+            "CompanyName": companyNameElement,
+            "DataSource": dataSourceElement,
+            "CompanyDetails": document.getElementById('chkCompanyDetails').checked,
+            "Professionals": document.getElementById('chkProfessionals').checked,
+            "Transactions": document.getElementById('chkTransactions').checked
+        };
+
+        selectedCompanies.push(newCompany);
+
+        // Update hidden input field with updated JSON data
+        hiddenField.value = JSON.stringify(selectedCompanies);
+
+        // Close the modal
+        $('#detailsModal').modal('hide');
+
+        updateCheckboxStates();
+    });
+
 </script>
 
 <script>
@@ -503,7 +616,9 @@
                     tableHtml += `
                         <tr>
                             <td class="text-center">
-                                <input type="checkbox" id="checkbox-${item.Id}" class="form-check-input" onclick="updateSelectedCompanies('${item.companyName.replace(/'/g, "\\'")}', 'DataSource1', this)">
+                                <input type="checkbox" id="checkbox-${item.Id}" class="form-check-input" onclick="updateSelectedCompanies('${item.companyName.replace(/'/g, "\\'")}', 'DataSource1', this)"
+                                data-companyname="${item.companyName.replace(/'/g, "\\'")}"
+                                data-datasource="DataSource1">
                             </td>
                             <td>${item.id}</td>
                             <td>${item.companyName}</td>
@@ -521,6 +636,7 @@
                 `;
 
                 document.getElementById('resultsContainer_1').innerHTML = tableHtml;
+                updateCheckboxStates();
             })
             .catch(error => {
                 document.getElementById('resultsContainer_1').innerHTML = `
@@ -574,7 +690,9 @@
                     tableHtml += `
                         <tr>
                             <td class="text-center">
-                                <input type="checkbox" id="checkbox-${item.Id}" class="form-check-input" onclick="updateSelectedCompanies('${item.companyName.replace(/'/g, "\\'")}', 'DataSource2', this)">
+                                <input type="checkbox" id="checkbox-${item.Id}" class="form-check-input" onclick="updateSelectedCompanies('${item.companyName.replace(/'/g, "\\'")}', 'DataSource2', this)"
+                                data-companyname="${item.companyName.replace(/'/g, "\\'")}"
+                                data-datasource="DataSource2">
                             </td>
                             <td>${item.id}</td>
                             <td>${item.companyName}</td>
@@ -592,6 +710,7 @@
                 `;
 
                 document.getElementById('resultsContainer_2').innerHTML = tableHtml;
+                updateCheckboxStates();
             })
             .catch(error => {
                 document.getElementById('resultsContainer_2').innerHTML = `
@@ -645,7 +764,9 @@
                     tableHtml += `
                         <tr>
                             <td class="text-center">
-                                <input type="checkbox" id="checkbox-${item.Id}" class="form-check-input" onclick="updateSelectedCompanies('${item.companyName.replace(/'/g, "\\'")}', 'DataSource3', this)">
+                                <input type="checkbox" id="checkbox-${item.Id}" class="form-check-input" onclick="updateSelectedCompanies('${item.companyName.replace(/'/g, "\\'")}', 'DataSource3', this)"
+                                data-companyname="${item.companyName.replace(/'/g, "\\'")}"
+                                data-datasource="DataSource3">
                             </td>
                             <td>${item.id}</td>
                             <td>${item.companyName}</td>
@@ -663,6 +784,7 @@
                 `;
 
                 document.getElementById('resultsContainer_3').innerHTML = tableHtml;
+                updateCheckboxStates();
             })
             .catch(error => {
                 document.getElementById('resultsContainer_3').innerHTML = `
@@ -716,7 +838,9 @@
                     tableHtml += `
                         <tr>
                             <td class="text-center">
-                                <input type="checkbox" id="checkbox-${item.Id}" class="form-check-input" onclick="updateSelectedCompanies('${item.companyName.replace(/'/g, "\\'")}', 'DataSource4', this)">
+                                <input type="checkbox" id="checkbox-${item.Id}" class="form-check-input" onclick="updateSelectedCompanies('${item.companyName.replace(/'/g, "\\'")}', 'DataSource4', this)"
+                                data-companyname="${item.companyName.replace(/'/g, "\\'")}"
+                                data-datasource="DataSource4">
                             </td>
                             <td>${item.id}</td>
                             <td>${item.companyName}</td>
@@ -734,6 +858,7 @@
                 `;
 
                 document.getElementById('resultsContainer_4').innerHTML = tableHtml;
+                updateCheckboxStates();
             })
             .catch(error => {
                 document.getElementById('resultsContainer_4').innerHTML = `
@@ -747,6 +872,7 @@
     function updateSelectedCompanies(companyName, dataSource, checkbox) {
         let hiddenField = document.getElementById('selectedCompanies');
         let selectedCompanies = JSON.parse(hiddenField.value || "[]");
+        companyName = companyName.replace(/'/g, "\\'");
 
         if (checkbox.checked) {
             // Add the company to the list
@@ -768,7 +894,26 @@
 
         // Update the hidden input field with new JSON value
         hiddenField.value = JSON.stringify(selectedCompanies);
-        //alert(hiddenField.value);
+    }
+</script>
+
+<script>
+    function updateCheckboxStates() {
+        let hiddenField = document.getElementById('selectedCompanies');
+        let selectedCompanies = JSON.parse(hiddenField.value || "[]");
+
+        document.querySelectorAll('.form-check-input').forEach(checkbox => {
+            let companyName = checkbox.getAttribute('data-companyname');
+            let dataSource = checkbox.getAttribute('data-datasource');
+            
+            if (companyName && dataSource) {
+                let isSelected = selectedCompanies.some(company =>
+                    company.CompanyName === companyName && company.DataSource === dataSource
+                );
+
+                checkbox.checked = isSelected;
+            }
+        });
     }
 </script>
 

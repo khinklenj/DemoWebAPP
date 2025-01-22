@@ -4,6 +4,8 @@ using DemoMVC.Data;
 using Microsoft.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static DemoWebApp.Pages.IndexModel;
+using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 
 namespace DemoWebApp.API
 {
@@ -31,202 +33,197 @@ namespace DemoWebApp.API
                 return BadRequest("Title is required.");
             }
 
-            if (string.IsNullOrWhiteSpace(request.CompanyName))
-            {
-                return BadRequest("Company name is required.");
-            }
-
-            // Call GetCompanyData to fetch company details
-            var companyDetailsResult = GetCompanyData(request.CompanyName);
-
-            // Check for NotFound response
-            if (companyDetailsResult == null || companyDetailsResult.Value == null)
-            {
-                return BadRequest("Company details not found.");
-            }
-
-            // Extract the details from the JsonResult
-            var details = companyDetailsResult.Value;
-
-            if (details == null)
-            {
-                return BadRequest("Failed to fetch company details.");
-            }
-
-
-            // Cast 'details' to a strongly typed object
-            var detailsJson = JsonConvert.SerializeObject(details);
-            var detailsData = JsonConvert.DeserializeObject<CompanyDetailsResponse>(detailsJson);
-
-            var detail1Data = detailsData.Detail1Data ?? new List<DetailItem>();
-            var transactionData = detailsData.TransactionData ?? new List<TransactionItem>();
-
+            List<SelectCompanyDetails> selectCompanyDetails = JsonConvert.DeserializeObject<List<SelectCompanyDetails>>(request.Details);
+            
             // Database connection
             string connectionString = "Server=KEITHLAPTOP\\SQLEXPRESS;Database=CompanyData;Integrated Security=True;TrustServerCertificate=True;";
 
-
             try
             {
-                //using (var connection = new SqlConnection(connectionString))
-                //{
-                //    await connection.OpenAsync();
 
-                //    // Step 1: Insert into Request table
-                //    var requestId = 0;
-                //    var insertRequestQuery = @"
-                //INSERT INTO [dbo].[Request] (RequestName, RequestType, CreateUserIdentity, CreateDate)
-                //OUTPUT INSERTED.RequestId
-                //VALUES (@RequestName, @RequestType, @CreateUserIdentity, GETDATE())";
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
 
-                //    using (var command = new SqlCommand(insertRequestQuery, connection))
-                //    {
-                //        command.Parameters.AddWithValue("@RequestName", request.Title);
-                //        command.Parameters.AddWithValue("@RequestType", request.CompanyName);
-                //        command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser"); // Replace with actual user identity
+                    foreach (SelectCompanyDetails companyDetails in selectCompanyDetails)
+                    {
+                        // Call GetCompanyData to fetch company details
+                        var companyDetailsResult = GetCompanyData(companyDetails.CompanyName.Replace("\\'","'"));
+                        // Extract the details from the JsonResult
+                        var details = companyDetailsResult.Value;
 
-                //        requestId = (int)await command.ExecuteScalarAsync();
-                //    }
+                        // Cast 'details' to a strongly typed object
+                        var detailsJson = JsonConvert.SerializeObject(details);
+                        var detailsData = JsonConvert.DeserializeObject<CompanyDetailsResponse>(detailsJson);
+
+                        var detail1Data = detailsData.Detail1Data ?? new List<DetailItem>();
+                        var transactionData = detailsData.TransactionData ?? new List<TransactionItem>();
 
 
-                //    // Initialize consolidated data for CoreData
-                //    string entityName = null;
-                //    string entityAddress = null;
-                //    string entityPhone = null;
-                //    string entityRevenue = null;
-                //    string entityEmployees = null;
-                //    string entityYearFounded = null;
-                //    string entityWebUrl = null;
-                //    string entityDescription = null;
+                        // Step 1: Insert into Request table
+                        var requestId = 0;
+                        var insertRequestQuery = @"
+                    INSERT INTO [dbo].[Request] (RequestName, RequestType, CreateUserIdentity, CreateDate)
+                    OUTPUT INSERTED.RequestId
+                    VALUES (@RequestName, @RequestType, @CreateUserIdentity, GETDATE())";
 
-                //    // Consolidate Detail1Data into a single row
-                //    foreach (var item in detail1Data)
-                //    {
-                //        var headers = item.Headers as List<string>;
-                //        var values = item.Values as List<List<string>>;
+                        using (var command = new SqlCommand(insertRequestQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@RequestName", request.Title);
+                            command.Parameters.AddWithValue("@RequestType", companyDetails.CompanyName);
+                            command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser"); // Replace with actual user identity
 
-                //        if (headers != null && values != null)
-                //        {
-                //            for (int i = 0; i < headers.Count; i++)
-                //            {
-                //                var header = headers[i];
-                //                var value = values.FirstOrDefault()?.ElementAtOrDefault(0); // Get the first value
+                            requestId = (int)await command.ExecuteScalarAsync();
+                        }
 
-                //                switch (header)
-                //                {
-                //                    case "IQ_COMPANY_NAME":
-                //                        entityName = value;
-                //                        break;
-                //                    case "IQ_COMPANY_ADDRESS":
-                //                        entityAddress = value;
-                //                        break;
-                //                    case "IQ_COMPANY_PHONE":
-                //                        entityPhone = value;
-                //                        break;
-                //                    case "IQ_TOTAL_REV":
-                //                        entityRevenue = value;
-                //                        break;
-                //                    case "IQ_EMPLOYEES":
-                //                        entityEmployees = value;
-                //                        break;
-                //                    case "IQ_YEAR_FOUNDED":
-                //                        entityYearFounded = value;
-                //                        break;
-                //                    case "IQ_COMPANY_WEBSITE":
-                //                        entityWebUrl = value;
-                //                        break;
-                //                    case "IQ_BUSINESS_DESCRIPTION":
-                //                        entityDescription = value;
-                //                        break;
-                //                }
-                //            }
-                //        }
-                //    }
+                        if (companyDetails.CompanyDetails)
+                        {
+                            // Initialize consolidated data for CoreData
+                            string entityName = null;
+                            string entityAddress = null;
+                            string entityPhone = null;
+                            string entityRevenue = null;
+                            string entityEmployees = null;
+                            string entityYearFounded = null;
+                            string entityWebUrl = null;
+                            string entityDescription = null;
 
-                //    using (var command = new SqlCommand("INSERT INTO CoreData (fkRequestID, EntityName, EntityAddress, EntityPhone, EntityRevenue, EntityEmployeeCount, EntityYearFounded, EntityWebUrl, EntityOverviewer, CreateDate, CreateUserIdentity) VALUES (@fkRequestID, @EntityName, @EntityAddress, @EntityPhone, @EntityRevenue, @EntityEmployeeCount, @EntityYearFounded, @EntityWebUrl, @EntityOverviewer, @CreateDate, @CreateUserIdentity)", connection))
-                //    {
-                //        command.Parameters.AddWithValue("@fkRequestID", requestId);
-                //        command.Parameters.AddWithValue("@EntityName", entityName ?? (object)DBNull.Value);
-                //        command.Parameters.AddWithValue("@EntityAddress", entityAddress ?? (object)DBNull.Value);
-                //        command.Parameters.AddWithValue("@EntityPhone", entityPhone ?? (object)DBNull.Value);
-                //        command.Parameters.AddWithValue("@EntityRevenue", entityRevenue ?? (object)DBNull.Value);
-                //        command.Parameters.AddWithValue("@EntityEmployeeCount", entityEmployees ?? (object)DBNull.Value);
-                //        command.Parameters.AddWithValue("@EntityYearFounded", entityYearFounded ?? (object)DBNull.Value);
-                //        command.Parameters.AddWithValue("@EntityWebUrl", entityWebUrl ?? (object)DBNull.Value);
-                //        command.Parameters.AddWithValue("@EntityOverviewer", entityDescription ?? (object)DBNull.Value);
-                //        command.Parameters.AddWithValue("@CreateDate", DateTime.Now);
-                //        command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
+                            // Consolidate Detail1Data into a single row
+                            foreach (var item in detail1Data)
+                            {
+                                var headers = item.Headers as List<string>;
+                                var values = item.Values as List<List<string>>;
 
-                //        command.ExecuteNonQuery();
-                //    }
+                                if (headers != null && values != null)
+                                {
+                                    for (int i = 0; i < headers.Count; i++)
+                                    {
+                                        var header = headers[i];
+                                        var value = values.FirstOrDefault()?.ElementAtOrDefault(0); // Get the first value
 
-                //    // Insert into KeyExecutives
-                //    var professionalData = detail1Data
-                //        .Where(item => item.Headers.Contains("IQ_PROFESSIONAL"))
-                //        .SelectMany(item => item.Values)
-                //        .ToList();
+                                        switch (header)
+                                        {
+                                            case "IQ_COMPANY_NAME":
+                                                entityName = value;
+                                                break;
+                                            case "IQ_COMPANY_ADDRESS":
+                                                entityAddress = value;
+                                                break;
+                                            case "IQ_COMPANY_PHONE":
+                                                entityPhone = value;
+                                                break;
+                                            case "IQ_TOTAL_REV":
+                                                entityRevenue = value;
+                                                break;
+                                            case "IQ_EMPLOYEES":
+                                                entityEmployees = value;
+                                                break;
+                                            case "IQ_YEAR_FOUNDED":
+                                                entityYearFounded = value;
+                                                break;
+                                            case "IQ_COMPANY_WEBSITE":
+                                                entityWebUrl = value;
+                                                break;
+                                            case "IQ_BUSINESS_DESCRIPTION":
+                                                entityDescription = value;
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
 
-                //    var professionalTitles = detail1Data
-                //        .Where(item => item.Headers.Contains("IQ_PROFESSIONAL_TITLE"))
-                //        .SelectMany(item => item.Values)
-                //        .ToList();
+                            using (var command = new SqlCommand("INSERT INTO CoreData (fkRequestID, EntityName, EntityAddress, EntityPhone, EntityRevenue, EntityEmployeeCount, EntityYearFounded, EntityWebUrl, EntityOverviewer, CreateDate, CreateUserIdentity) VALUES (@fkRequestID, @EntityName, @EntityAddress, @EntityPhone, @EntityRevenue, @EntityEmployeeCount, @EntityYearFounded, @EntityWebUrl, @EntityOverviewer, @CreateDate, @CreateUserIdentity)", connection))
+                            {
+                                command.Parameters.AddWithValue("@fkRequestID", requestId);
+                                command.Parameters.AddWithValue("@EntityName", entityName ?? (object)DBNull.Value);
+                                command.Parameters.AddWithValue("@EntityAddress", entityAddress ?? (object)DBNull.Value);
+                                command.Parameters.AddWithValue("@EntityPhone", entityPhone ?? (object)DBNull.Value);
+                                command.Parameters.AddWithValue("@EntityRevenue", entityRevenue ?? (object)DBNull.Value);
+                                command.Parameters.AddWithValue("@EntityEmployeeCount", entityEmployees ?? (object)DBNull.Value);
+                                command.Parameters.AddWithValue("@EntityYearFounded", entityYearFounded ?? (object)DBNull.Value);
+                                command.Parameters.AddWithValue("@EntityWebUrl", entityWebUrl ?? (object)DBNull.Value);
+                                command.Parameters.AddWithValue("@EntityOverviewer", entityDescription ?? (object)DBNull.Value);
+                                command.Parameters.AddWithValue("@CreateDate", DateTime.Now);
+                                command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
 
-                //    for (int i = 0; i < professionalData.Count; i++)
-                //    {
-                //        var title = professionalTitles.ElementAtOrDefault(i)?.FirstOrDefault() ?? "Unknown Title";
-                //        var name = professionalData.ElementAtOrDefault(i)?.FirstOrDefault() ?? "Unknown Name";
+                                command.ExecuteNonQuery();
+                            }
+                        }
 
-                //        var insertKeyExecutivesQuery = @"
-                //    INSERT INTO [dbo].[KeyExecutives] 
-                //    (fkRequestID, Title, Name, CreateDate, CreateUserIdentity)
-                //    VALUES 
-                //    (@RequestId, @Title, @Name, GETDATE(), @CreateUserIdentity)";
+                        if (companyDetails.Professionals)
+                        {
 
-                //        using (var command = new SqlCommand(insertKeyExecutivesQuery, connection))
-                //        {
-                //            command.Parameters.AddWithValue("@RequestId", requestId);
-                //            command.Parameters.AddWithValue("@Title", title);
-                //            command.Parameters.AddWithValue("@Name", name);
-                //            command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
+                            // Insert into KeyExecutives
+                            var professionalData = detail1Data
+                            .Where(item => item.Headers.Contains("IQ_PROFESSIONAL"))
+                            .SelectMany(item => item.Values)
+                            .ToList();
 
-                //            await command.ExecuteNonQueryAsync();
-                //        }
-                //    }
+                            var professionalTitles = detail1Data
+                                .Where(item => item.Headers.Contains("IQ_PROFESSIONAL_TITLE"))
+                                .SelectMany(item => item.Values)
+                                .ToList();
 
-                //    // Insert into TransactionSummary
-                //    foreach (var transaction in transactionData)
-                //    {
-                //        var headers = transaction.Headers ?? new List<string>();
-                //        var values = transaction.Values ?? new List<List<string>>();
+                            for (int i = 0; i < professionalData.Count; i++)
+                            {
+                                var title = professionalTitles.ElementAtOrDefault(i)?.FirstOrDefault() ?? "Unknown Title";
+                                var name = professionalData.ElementAtOrDefault(i)?.FirstOrDefault() ?? "Unknown Name";
 
-                //        for (int i = 0; i < headers.Count; i++)
-                //        {
-                //            var transactionDescription = headers[i]; // Use header as the description
-                //            var transactionValue = values.ElementAtOrDefault(i)?.FirstOrDefault(); // Get the corresponding value
-                //            var transactionDate = DateTime.Now; // Current date
-                //            var transactionCounsel = DBNull.Value; // Set as NULL
+                                var insertKeyExecutivesQuery = @"
+                        INSERT INTO [dbo].[KeyExecutives] 
+                        (fkRequestID, Title, Name, CreateDate, CreateUserIdentity)
+                        VALUES 
+                        (@RequestId, @Title, @Name, GETDATE(), @CreateUserIdentity)";
 
-                //            var insertTransactionSummaryQuery = @"
-                //            INSERT INTO [dbo].[TransactionSummary] 
-                //            (fkRequestID, TransactionDate, TransactionDescription, TransactionValue, TransactionCounsel, CreateDate, CreateUserIdentity)
-                //            VALUES 
-                //            (@RequestId, @TransactionDate, @TransactionDescription, @TransactionValue, @TransactionCounsel, GETDATE(), @CreateUserIdentity)";
+                                using (var command = new SqlCommand(insertKeyExecutivesQuery, connection))
+                                {
+                                    command.Parameters.AddWithValue("@RequestId", requestId);
+                                    command.Parameters.AddWithValue("@Title", title);
+                                    command.Parameters.AddWithValue("@Name", name);
+                                    command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
 
-                //            using (var command = new SqlCommand(insertTransactionSummaryQuery, connection))
-                //            {
-                //                command.Parameters.AddWithValue("@RequestId", requestId);
-                //                command.Parameters.AddWithValue("@TransactionDate", transactionDate);
-                //                command.Parameters.AddWithValue("@TransactionDescription", transactionDescription ?? (object)DBNull.Value);
-                //                command.Parameters.AddWithValue("@TransactionValue", transactionValue ?? (object)DBNull.Value);
-                //                command.Parameters.AddWithValue("@TransactionCounsel", transactionCounsel);
-                //                command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
+                                    await command.ExecuteNonQueryAsync();
+                                }
+                            }
+                        }
 
-                //                await command.ExecuteNonQueryAsync();
-                //            }
-                //        }
-                //    }
+                        if (companyDetails.Transactions)
+                        {
+                            // Insert into TransactionSummary
+                            foreach (var transaction in transactionData)
+                            {
+                                var headers = transaction.Headers ?? new List<string>();
+                                var values = transaction.Values ?? new List<List<string>>();
 
-                //    return Ok(new { message = "Data stored successfully!" });
-                //}
+                                for (int i = 0; i < headers.Count; i++)
+                                {
+                                    var transactionDescription = headers[i]; // Use header as the description
+                                    var transactionValue = values.ElementAtOrDefault(i)?.FirstOrDefault(); // Get the corresponding value
+                                    var transactionDate = DateTime.Now; // Current date
+                                    var transactionCounsel = DBNull.Value; // Set as NULL
+
+                                    var insertTransactionSummaryQuery = @"
+                                INSERT INTO [dbo].[TransactionSummary] 
+                                (fkRequestID, TransactionDate, TransactionDescription, TransactionValue, TransactionCounsel, CreateDate, CreateUserIdentity)
+                                VALUES 
+                                (@RequestId, @TransactionDate, @TransactionDescription, @TransactionValue, @TransactionCounsel, GETDATE(), @CreateUserIdentity)";
+
+                                    using (var command = new SqlCommand(insertTransactionSummaryQuery, connection))
+                                    {
+                                        command.Parameters.AddWithValue("@RequestId", requestId);
+                                        command.Parameters.AddWithValue("@TransactionDate", transactionDate);
+                                        command.Parameters.AddWithValue("@TransactionDescription", transactionDescription ?? (object)DBNull.Value);
+                                        command.Parameters.AddWithValue("@TransactionValue", transactionValue ?? (object)DBNull.Value);
+                                        command.Parameters.AddWithValue("@TransactionCounsel", transactionCounsel);
+                                        command.Parameters.AddWithValue("@CreateUserIdentity", "SystemUser");
+
+                                        await command.ExecuteNonQueryAsync();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
                 return Ok(new { message = "Data stored successfully!" });
             }
@@ -568,7 +565,16 @@ namespace DemoWebApp.API
     public class StoreCompanyDetailsRequest
     {
         public string Title { get; set; }
+        public string Details { get; set; }
+    }
+
+    public class SelectCompanyDetails
+    {
         public string CompanyName { get; set; }
+        public string DataSource { get; set; }
+        public bool CompanyDetails { get; set; }
+        public bool Professionals { get; set; }
+        public bool Transactions { get; set; }
     }
 
     public class CompanyDetailsResponse
