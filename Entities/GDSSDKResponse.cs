@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace DemoMVC.Data
@@ -38,5 +39,20 @@ namespace DemoMVC.Data
     {
         [JsonProperty("Row")]
         public List<string> Row { get; set; }
+    }
+
+    public class LexMachina
+    {
+        public int totalCount { get; set; }
+        public int page { get; set; }
+        public int? nextPage { get; set; }
+        public List<LexMachinaParty> parties { get; set; }
+    }
+
+    public class LexMachinaParty
+    {
+        public string name { get; set; }
+        public int partyId { get; set; }
+        public string url { get; set; }
     }
 }

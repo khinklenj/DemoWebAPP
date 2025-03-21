@@ -400,7 +400,7 @@ namespace DemoWebApp.API
             }
 
             // Load data from JSON file
-            var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Data", "Header1.json");
+            var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Data", "LexMachina.json");
             if (!System.IO.File.Exists(jsonFilePath))
             {
                 return NotFound("Data file not found.");
@@ -409,29 +409,21 @@ namespace DemoWebApp.API
             try
             {
                 var jsonData = System.IO.File.ReadAllText(jsonFilePath);
-                var parsedData = JsonConvert.DeserializeObject<GDSSDKResponseRoot>(jsonData);
+                var parsedData = JsonConvert.DeserializeObject<LexMachina>(jsonData);
 
-                if (parsedData?.GDSSDKResponse == null)
+                if (parsedData?.parties == null)
                 {
                     return NotFound("No data available in the file.");
                 }
 
                 // Find the matching Identifier and process Rows
-                var matchingResponse = parsedData.GDSSDKResponse
-                    .FirstOrDefault(r => string.Equals(r.Identifier, searchTerm, StringComparison.OrdinalIgnoreCase));
+                var matchingParties = parsedData.parties
+                    .Where(p => p.name.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .ToList();
 
-                if (matchingResponse != null && matchingResponse.Rows != null)
+                if (matchingParties.Any())
                 {
-                    var result = matchingResponse.Rows
-                        .Select((row, index) => new ResultItem
-                        {
-                            Id = index + 1,
-                            CompanyName = row.Row.FirstOrDefault() ?? "",  // First element as "CompanyName"
-                            AsOfDate = row.Row.ElementAtOrDefault(1) ?? ""  // Second element as "AsOfDate" if exists
-                        })
-                        .ToList();
-
-                    return Ok(result);
+                    return Ok(matchingParties);
                 }
 
                 return NotFound("No matching data found.");
