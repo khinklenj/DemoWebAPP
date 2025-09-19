@@ -1,0 +1,88 @@
+# Build Folders (Objective-C style)
+build/
+[Bb]uild/
+[Bb]in/
+[Oo]bj/
+
+# Rider project files
+.idea/
+
+# VS Code directories
+.vscode/
+
+# User-specific files
+*.swp
+*.swo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+logs/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.pid
+*.seed
+*.pid.lock
+*.nfs*
+
+# Visual Studio temporary files
+.vs/
+_ReSharper*/
+*.suo
+*.user
+*.userprefs
+*.lnk
+
+# OS Generated files
+.DS_Store
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Node.js files
+node_modules/
+
+# ASP.NET Temporary Files
+ClientBin/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Azure Web Apps log files
+azure*
+
+# JetBrains Rider
+.idea/
+.idea_modules/
+.idea_cache/
+.idea_research/
+.idea_guidelines/
+.idea_troubleshooting/
+.idea_localhistory/
+
+# Package files
+*.nupkg
+*.snupkg
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+!packages/repositories.config
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Personal directories
+Desktop.ini

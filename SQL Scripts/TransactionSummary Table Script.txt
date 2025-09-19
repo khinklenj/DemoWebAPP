@@ -1,0 +1,12 @@
+﻿CREATE TABLE [dbo].[TransactionSummary](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[fkRequestID] [int] NULL,
+	[CreateDate] [date] NULL,
+	[CreateUserIdentity] [varchar](50) NULL,
+	[ModifiedDate] [date] NULL,
+	[ModifiedUserIdentity] [varchar](50) NULL,
+	[TransactionDate] [date] NULL,
+	[TransactionDescription] [varchar](max) NULL,
+	[TransactionValue] [varchar](max) NULL,
+	[TransactionCounsel] [varchar](max) NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]

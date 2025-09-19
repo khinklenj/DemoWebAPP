@@ -1,0 +1,17 @@
+﻿CREATE TABLE [dbo].[CoreData](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[fkRequestID] [int] NULL,
+	[EntityName] [varchar](50) NULL,
+	[EntityAddress] [varchar](max) NULL,
+	[EntityPhone] [varchar](50) NULL,
+	[EntityRevenue] [varchar](50) NULL,
+	[EntityEmployeeCount] [varchar](50) NULL,
+	[EntityYearFounded] [varchar](50) NULL,
+	[ClientNumber] [varchar](50) NULL,
+	[EntityWebUrl] [varchar](max) NULL,
+	[EntityOverviewer] [varchar](max) NULL,
+	[CreateDate] [date] NULL,
+	[CreateUserIdentity] [varchar](50) NULL,
+	[ModifiedDate] [date] NULL,
+	[ModifiedUserIdenitity] [varchar](50) NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]

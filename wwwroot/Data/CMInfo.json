@@ -1,0 +1,152 @@
+[
+  {
+    "clientNumber": "C1001",
+    "clientName": "Alpha Medical",
+    "status": "Open",
+    "openDate": "2023-01-15"
+  },
+  {
+    "clientNumber": "C1002",
+    "clientName": "Alpha Medica",
+    "status": "Closed",
+    "openDate": "2022-11-10"
+  },
+  {
+    "clientNumber": "C1003",
+    "clientName": "Beta Solutions",
+    "status": "Pending",
+    "openDate": "2024-03-20"
+  },
+  {
+    "clientNumber": "C1004",
+    "clientName": "Beta Solution Group",
+    "status": "Open",
+    "openDate": "2023-09-02"
+  },
+  {
+    "clientNumber": "C1005",
+    "clientName": "Gamma Tech",
+    "status": "Suspended",
+    "openDate": "2021-06-18"
+  },
+  {
+    "clientNumber": "C1006",
+    "clientName": "Gamma Technologies",
+    "status": "Open",
+    "openDate": "2023-12-25"
+  },
+  {
+    "clientNumber": "C1007",
+    "clientName": "Delta Corp",
+    "status": "Closed",
+    "openDate": "2022-02-14"
+  },
+  {
+    "clientNumber": "C1008",
+    "clientName": "Delta Corporation",
+    "status": "Open",
+    "openDate": "2024-01-01"
+  },
+  {
+    "clientNumber": "C1009",
+    "clientName": "Epsilon LLC",
+    "status": "Open",
+    "openDate": "2023-05-30"
+  },
+  {
+    "clientNumber": "C1010",
+    "clientName": "Epsilon Group",
+    "status": "Pending",
+    "openDate": "2023-07-12"
+  },
+  {
+    "clientNumber": "C1011",
+    "clientName": "Zeta Health",
+    "status": "Open",
+    "openDate": "2022-09-22"
+  },
+  {
+    "clientNumber": "C1012",
+    "clientName": "Zeta Healthcare",
+    "status": "Closed",
+    "openDate": "2023-10-05"
+  },
+  {
+    "clientNumber": "C1013",
+    "clientName": "Omega Partners",
+    "status": "Open",
+    "openDate": "2021-04-09"
+  },
+  {
+    "clientNumber": "C1014",
+    "clientName": "Omega Partner Services",
+    "status": "Pending",
+    "openDate": "2024-02-11"
+  },
+  {
+    "clientNumber": "C1015",
+    "clientName": "Prime Consulting",
+    "status": "Suspended",
+    "openDate": "2022-08-01"
+  },
+  {
+    "clientNumber": "C1016",
+    "clientName": "Prime Consult",
+    "status": "Open",
+    "openDate": "2023-03-18"
+  },
+  {
+    "clientNumber": "C1017",
+    "clientName": "Vertex Systems",
+    "status": "Closed",
+    "openDate": "2022-12-27"
+  },
+  {
+    "clientNumber": "C1018",
+    "clientName": "Vertex System Solutions",
+    "status": "Open",
+    "openDate": "2023-06-14"
+  },
+  {
+    "clientNumber": "C1019",
+    "clientName": "Summit Global",
+    "status": "Open",
+    "openDate": "2023-11-19"
+  },
+  {
+    "clientNumber": "C1020",
+    "clientName": "Summit Worldwide",
+    "status": "Pending",
+    "openDate": "2023-02-21"
+  },
+  {
+    "clientNumber": "C1021",
+    "clientName": "Atlas Finance",
+    "status": "Open",
+    "openDate": "2021-09-17"
+  },
+  {
+    "clientNumber": "C1022",
+    "clientName": "Atlas Financial",
+    "status": "Closed",
+    "openDate": "2022-05-23"
+  },
+  {
+    "clientNumber": "C1023",
+    "clientName": "Nova Energy",
+    "status": "Pending",
+    "openDate": "2024-04-02"
+  },
+  {
+    "clientNumber": "C1024",
+    "clientName": "Nova Energies",
+    "status": "Open",
+    "openDate": "2023-08-11"
+  },
+  {
+    "clientNumber": "C1025",
+    "clientName": "Quantum Labs",
+    "status": "Closed",
+    "openDate": "2023-01-29"
+  }
+]

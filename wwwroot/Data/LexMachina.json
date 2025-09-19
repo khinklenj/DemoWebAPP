@@ -1,0 +1,32 @@
+{
+  "totalCount": 5,
+  "page": 1,
+  "nextpage": null,
+  "parties": [
+    {
+      "name": "Subway Real Estate Corp.",
+      "partyId": 8775,
+      "url": "https://api.sandbox.lexmachina.com/parties/8755"
+    },
+    {
+      "name": "Subway Inc.",
+      "partyId": 881340,
+      "url": "https://api.sandbox.lexmachina.com/parties/881340"
+    },
+    {
+      "name": "Subway Real Estate, LLC",
+      "partyId": 38452083,
+      "url": "https://api.sandbox.lexmachina.com/parties/38452083"
+    },
+    {
+      "name": "Subway Worldwide, Inc.",
+      "partyId": 42395856,
+      "url": "https://api.sandbox.lexmachina.com/parties/42395856"
+    },
+    {
+      "name": "SUBWAY RESTAURANTS #34502.",
+      "partyId": 50016268,
+      "url": "https://api.sandbox.lexmachina.com/parties/50016268"
+    }
+  ]
+}

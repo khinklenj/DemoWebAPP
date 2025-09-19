@@ -1,0 +1,251 @@
+{
+  "GDSSDKResponse": [
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TR_CLOSED_DATE"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQTR1853672433",
+      "NumCols": 1,
+      "Mnemonic": "IQ_TR_CLOSED_DATE",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Apr 30 2024 12:00AM",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TR_TOTAL_CONSID_SH_FINAL"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQTR1853672433",
+      "NumCols": 1,
+      "Mnemonic": "IQ_TR_TOTAL_CONSID_SH_FINAL",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "10000.000000",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TR_BUYERNAME"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQTR1853672433",
+      "NumCols": 1,
+      "Mnemonic": "IQ_TR_BUYERNAME",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Roark Capital Management LLC",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TR_BUY_LEG_ADVISORS"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQTR1853672433",
+      "NumCols": 1,
+      "Mnemonic": "IQ_TR_BUY_LEG_ADVISORS",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Paul, Weiss, Rifkind, Wharton & Garrison LLP",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TR_SELL_LEG_ADVISORS"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQTR1853672433",
+      "NumCols": 1,
+      "Mnemonic": "IQ_TR_SELL_LEG_ADVISORS",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Data Unavailable",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TR_TARGET_LEG_ADVISORS"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQTR1853672433",
+      "NumCols": 1,
+      "Mnemonic": "IQ_TR_TARGET_LEG_ADVISORS",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Sullivan & Cranwell LLP",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TR_TARGET_ID"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQTR1853672433",
+      "NumCols": 1,
+      "Mnemonic": "IQ_TR_TARGET_ID",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "IQ246718",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TR_DEF_AGRMT_DATE"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQTR1853672433",
+      "NumCols": 1,
+      "Mnemonic": "IQ_TR_DEF_AGRMT_DATE",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Aug 24 2023 12:00AM"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TR_TARGET_ID"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQTR1853672433",
+      "NumCols": 1,
+      "Mnemonic": "IQ_TR_TARGET_ID",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "IQ246718"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TR_COMMENTS"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQTR1853672433",
+      "NumCols": 1,
+      "Mnemonic": "IQ_TR_COMMENTS",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Comments"
+          ]
+        }
+      ]
+    }
+  ]
+}

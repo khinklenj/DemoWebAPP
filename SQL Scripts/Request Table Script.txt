@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[Request](
+	[RequestId] [int] IDENTITY(1,1) NOT NULL,
+	[RequestName] [varchar](50) NULL,
+	[RequestType] [varchar](50) NULL,
+	[CreateUserIdentity] [varchar](50) NULL,
+	[CreateDate] [date] NULL,
+	[ModifiedDate] [date] NULL,
+	[ModifiedUserIdentity] [varchar](50) NULL
+) ON [PRIMARY]

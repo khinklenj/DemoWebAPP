@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[KeyExecutives](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[fkRequestID] [int] NULL,
+	[CreateDate] [date] NULL,
+	[CreateUserIdentity] [varchar](50) NULL,
+	[ModifiedDate] [date] NULL,
+	[ModifiedUserIdentity] [varchar](50) NULL,
+	[Title] [varchar](200) NULL,
+	[Name] [varchar](200) NULL
+) ON [PRIMARY]

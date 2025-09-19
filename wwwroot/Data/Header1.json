@@ -1,0 +1,58 @@
+{
+  "GDSSDKResponse": [
+    {
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_COMPANY_NAME_QUICK_MATCH",
+        "AsOfDate"
+      ],
+      "NumRows": 5,
+      "Seniority": "",
+      "Properties": {
+        "endrank": "5",
+        "startrank": "1"
+      },
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSHE",
+      "Identifier": "Subway",
+      "NumCols": 2,
+      "Mnemonic": "IQ_COMPANY_NAME_QUICK_MATCH",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Subway",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Doctor's Associates Inc.",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Subway International B.V.",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Subway Franchise",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Subway Holding Company Limited",
+            ""
+          ]
+        }
+      ]
+    }
+  ]
+}

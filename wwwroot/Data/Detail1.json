@@ -1,0 +1,526 @@
+{
+  "GDSSDKResponse": [
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_COMPANY_NAME"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_COMPANY_NAME",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Doctor's Associates Inc.",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_COMPANY_ADDRESS"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_COMPANY_ADDRESS",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "325 Bic Drive, Milford, Connecticut, 06460-3059, United States"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_COMPANY_PHONE"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_COMPANY_PHONE",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "203 877 4281"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_YEAR_FOUNDED"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_YEAR_FOUNDED",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "1965"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_CEO_NAME"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_CEO_NAME",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Chidesy, John"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_CFO_NAME"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_CFO_NAME",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Shepherd, Jeffrey"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_COO_NAME"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_COO_NAME",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Kappitt, Michael"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_COO_NAME"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_COO_NAME",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Kappitt, Michael"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_BUSINESS_DESCRIPTION"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_BUSINESS_DESCRIPTION",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Doctor's Associates Inc., doing business as SUBWAY, owns and operates a chain in the United States and internationally. Its menu includes sandwiches, breakfast, salads, snacks, sides, drinks, baked goods, extras, and other products. The company also offers franchise opportunities. Doctor's Associates Inc. is based in Milford, Connecticut."
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_EMPLOYEES"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_EMPLOYEES",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "730"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_COMPANY_WEBSITE"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSP",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_COMPANY_WEBSITE",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Data Unavailable"
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_COMPETITOR_NAMED_BY_COMPETITOR",
+        "AsOfDate"
+      ],
+      "NumRows": 5,
+      "Seniority": "",
+      "Properties": {
+        "endrank": "10",
+        "startrank": "1"
+      },
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSHE",
+      "Identifier": "IQ246718",
+      "NumCols": 1,
+      "Mnemonic": "IQ_COMPETITOR_NAMED_BY_COMPETITOR",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "NYSE:ARCO",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "IQ433835320",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "IQ413896276",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "OTCPK:KITL",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "ASX:OLI",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "Function": "GDSP",
+      "Mnemonic": "IQ_TOTAL_REV",
+      "NumCols": 1,
+      "NumRows": 1,
+      "ErrMsg": "",
+      "CacheExpiryTime": "",
+      "Headers": [
+        "IQ_TOTAL_REV"
+      ],
+      "Rows": [
+        {
+          "Row": [
+            "1102.749"
+          ]
+        }
+      ],
+      "Properties": {
+        "restatementtypeid": "LC",
+        "periodtype": "IQ_FY"
+      },
+      "Identifier": "IQ246718",
+      "Frequency": ""
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_PROFESSIONAL",
+        "PeriodDate"
+      ],
+      "NumRows": 10,
+      "Seniority": "",
+      "Properties": {
+        "endrank": "10",
+        "startrank": "1",
+        "metadatatag": "PeriodDate",
+        "restatementtypeid": "LC",
+        "periodtype": "FY2024"
+      },
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSHE",
+      "Identifier": "IQ246718",
+      "NumCols": 2,
+      "Mnemonic": "IQ_PROFESSIONAL",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Chidseym, John W.",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Buck, Peter",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Shepherd, Jeffery W.",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Kappitt, Michael",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Van Hout, Thys",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Herlihy, Donagh M.",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Kobert, Ilene ",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Christou, Lorri",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Rafferty, Steve",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Walsh, Carrie",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "SnapType": "",
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_PROFESSIONAL_TITLE",
+        "PeriodDate"
+      ],
+      "NumRows": 10,
+      "Seniority": "",
+      "Properties": {
+        "endrank": "10",
+        "startrank": "1",
+        "metadatatag": "PeriodDate",
+        "restatementtypeid": "LC",
+        "periodtype": "FY2024"
+      },
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSHE",
+      "Identifier": "IQ246718",
+      "NumCols": 2,
+      "Mnemonic": "IQ_PROFESSIONAL_TITLE",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "Chief Executive Officer",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "CO-Founder",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Chief Operating & Insights Officer",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Chief Technology Officer",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Secretary, General Counsel & Chief Legal Officer",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Vice President of Public Relations, Communications & Public Affairs",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Senior VP of Development for North America",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "President of EMEA",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "Rafferty, Steve",
+            ""
+          ]
+        }
+      ]
+    }
+  ]
+}

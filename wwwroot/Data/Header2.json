@@ -1,0 +1,34 @@
+{
+  "GDSSDKResponse": [
+    {
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_COMPANY_ID_QUICK_MATCH",
+        "AsOfDate"
+      ],
+      "NumRows": 1,
+      "Seniority": "",
+      "Properties": {
+        "endrank": "1",
+        "startrank": "1"
+      },
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSHE",
+      "Identifier": "Doctor's Associates Inc.",
+      "NumCols": 2,
+      "Mnemonic": "IQ_COMPANY_ID_QUICK_MATCH",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "IQ246718",
+            ""
+          ]
+        }
+      ]
+    }
+  ]
+}

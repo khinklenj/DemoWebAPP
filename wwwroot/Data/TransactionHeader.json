@@ -1,0 +1,58 @@
+{
+  "GDSSDKResponse": [
+    {
+      "ErrMsg": "",
+      "Headers": [
+        "IQ_TRANSACTION_LIST",
+        "AsOfDate"
+      ],
+      "NumRows": 5,
+      "Seniority": "",
+      "Properties": {
+        "endrank": "7",
+        "startrank": "1"
+      },
+      "EndDate": "",
+      "CacheExpiryTime": "0",
+      "StartDate": "",
+      "Function": "GDSHE",
+      "Identifier": "IQ246718",
+      "NumCols": 2,
+      "Mnemonic": "IQ_TRANSACTION_LIST",
+      "Frequency": "",
+      "Limit": "",
+      "Rows": [
+        {
+          "Row": [
+            "IQTR1853672433",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "IQTR1844626691",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "IQTR383028915",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "IQTR340461390",
+            ""
+          ]
+        },
+        {
+          "Row": [
+            "IQTR81851327",
+            ""
+          ]
+        }
+      ]
+    }
+  ]
+}
